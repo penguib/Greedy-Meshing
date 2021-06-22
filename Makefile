@@ -11,12 +11,11 @@ TARGET = main
 all: bin link run
 
 
-%.o: %.cpp
+%.o: %.cpp 
 # replace the src/ suffix with bin/objs
 	$(CC) $(CXXFLAGS) -c -o $(subst src, $(OBJS), $@) $<
 
 link: $(OBJ)
-#	same thing as above
 	$(CC) $(CXXFLAGS) -o $(BIN)/$(TARGET) $(subst src, $(OBJS), $(OBJ))
 
 run:
@@ -27,3 +26,4 @@ bin:
 
 clean:
 	rm -rf $(BIN)
+	clear

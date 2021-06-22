@@ -1,11 +1,11 @@
-#include "GreedyMesher.h"
+#include <iostream>
+#include "map.h"
 
 int main() {
 
-	Person p("Aidan");
-	p.Greet();
-
-	std::cout << "Hello, world!" << std::endl;
+	Map* map = Map::Get();
+	map->Print();
+	map->Mesh();
 
 	return 0;
 }
