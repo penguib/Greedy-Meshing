@@ -26,7 +26,8 @@ private:
 	Map();
 	~Map();
 
-	tTileVec FindConnected(const tTileVec& out_vec = {});
+	tTileVec FindConnected();
+	std::vector<Tile> DFS(int row, int col);
 
 	static Map* s_instance;
 	std::vector<std::array<Tile, 10>> m_tiles;

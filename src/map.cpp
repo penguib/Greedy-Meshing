@@ -41,32 +41,58 @@ void Map::Print() {
 	}
 }
 
-tTileVec Map::FindConnected(const tTileVec& out_vec = {}) {
-	tTileVec connected;
 
-	for (int i = 0; i < m_tiles.size(); ++i) {
-		for (int j = 0; j < m_tiles.size(); ++j) {
-			
+/*
+	0	0	0	1	0	0
+	0	0	1	0	0	0
+	0	0	0	1	0	0
+	0	0	0	0	0	0
+	0	0	0	0	0	0
+
+
+*/
+
+std::vector<Tile> Map::DFS(int row, int col) {
+	std::vector<Tile> mesh;
+
+	if (row < 0 || col < 0 || row > m_tiles.size() || col > m_tiles.size())
+		return {};
+
+	m_tiles[row][col].SetVisited(1);
+	for (int i = (row - 1); i < (row + 1); ++i) {
+		for (int j = (col - 1); j < (col + 1); ++j) {
 			Tile tile = m_tiles[i][j];
-			auto position = tile.GetPosition();
 
-			auto isCorner = [this](const Tile::tArray& in_position) -> bool {
-				int x = in_position[0];
-				int y = in_position[1];
-
-				if (x == 0 || x == (m_dimensions - 1) || y == 0 || y == (m_dimensions - 1))
-					return true;
-				return false;
-			};
-			//
-			if (!(int)tile.IsVisited()) {
-				
-				if (isCorner(position)) {
-
-				}
+			if (!tile.IsAir() && !tile.IsVisited()) {
+				mesh.push_back(tile);
+				std::cout << tile << std::endl;
+				return DFS(i, j);
 			}
 		}	
 	}
+
+	return mesh;
+}
+
+tTileVec Map::FindConnected() {
+	tTileVec connected;
+	int count = 0;
+
+	for (int i = 0; i < m_tiles.size(); ++i) {
+		for (int j = 0; j < m_tiles.size(); ++j) {
+			Tile tile = m_tiles[i][j];
+			//&& !tile.IsVisited()
+			// air is 1
+			if (!tile.IsAir()) {
+				++count;
+				std::cout << tile << std::endl;
+				// connected.push_back(DFS(i, j));
+			}
+
+		}	
+	}
+
+	std::cout << "visited " << count << std::endl;
 
 	return connected;
 }
@@ -84,6 +110,14 @@ void Map::Mesh() {
 	}
 
 	FindConnected();
+	
+	
+	for (auto row : m_tiles) {
+		for (auto tile : row) {
+			std::cout << "[" << (int)(tile.IsVisited()) << "] ";
+		}
+		std::cout << std::endl;
+	}
 }
 
 
